@@ -1,6 +1,6 @@
 ﻿namespace Copilot.Domain.Entities;
 
-public class TodoList : BaseAuditableEntity
+public class TodoList
 {
     public string? Title { get; set; }
 

@@ -1,33 +1,31 @@
-﻿using Copilot.Application.Common.Interfaces;
-using Copilot.Application.Common.Mappings;
+﻿using Copilot.Application.Common.Mappings;
 using Copilot.Application.Common.Models;
-
+using Copilot.Application.TodoItems.Repositories;
+using Copilot.Domain.Entities;
 namespace Copilot.Application.TodoItems.Queries.GetTodoItemsWithPagination;
 
 public record GetTodoItemsWithPaginationQuery : IRequest<PaginatedList<TodoItemBriefDto>>
 {
-    public int ListId { get; init; }
     public int PageNumber { get; init; } = 1;
     public int PageSize { get; init; } = 10;
 }
 
-public class GetTodoItemsWithPaginationQueryHandler : IRequestHandler<GetTodoItemsWithPaginationQuery, PaginatedList<TodoItemBriefDto>>
+public class GetTodoItemsWithPaginationQueryHandler(ITodoItemRepository todoItemRepository, IMapper mapper) : IRequestHandler<GetTodoItemsWithPaginationQuery, PaginatedList<TodoItemBriefDto>>
 {
-    private readonly IApplicationDbContext _context;
-    private readonly IMapper _mapper;
+    private readonly ITodoItemRepository _todoItemRepository = todoItemRepository;
+    private readonly IMapper _mapper = mapper;
 
-    public GetTodoItemsWithPaginationQueryHandler(IApplicationDbContext context, IMapper mapper)
-    {
-        _context = context;
-        _mapper = mapper;
-    }
 
     public async Task<PaginatedList<TodoItemBriefDto>> Handle(GetTodoItemsWithPaginationQuery request, CancellationToken cancellationToken)
     {
-        return await _context.TodoItems
-            .Where(x => x.ListId == request.ListId)
-            .OrderBy(x => x.Title)
-            .ProjectTo<TodoItemBriefDto>(_mapper.ConfigurationProvider)
-            .PaginatedListAsync(request.PageNumber, request.PageSize);
+        PaginatedList<TodoItem> todoItems = await _todoItemRepository.GetListAsync(request.PageNumber, request.PageSize);
+
+        return new PaginatedList<TodoItemBriefDto>(
+            todoItems.Items.Select(x => _mapper.Map<TodoItemBriefDto>(x)).ToList(),
+            todoItems.TotalCount, 
+            request.PageNumber,
+            request.PageSize
+        );
+
     }
 }

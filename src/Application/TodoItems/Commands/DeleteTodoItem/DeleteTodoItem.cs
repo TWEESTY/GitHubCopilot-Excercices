@@ -1,31 +1,19 @@
-﻿using Copilot.Application.Common.Interfaces;
+﻿using Copilot.Application.TodoItems.Repositories;
 using Copilot.Domain.Events;
 
 namespace Copilot.Application.TodoItems.Commands.DeleteTodoItem;
 
 public record DeleteTodoItemCommand(int Id) : IRequest;
 
-public class DeleteTodoItemCommandHandler : IRequestHandler<DeleteTodoItemCommand>
+public class DeleteTodoItemCommandHandler(ITodoItemRepository todoItemRepository) : IRequestHandler<DeleteTodoItemCommand>
 {
-    private readonly IApplicationDbContext _context;
-
-    public DeleteTodoItemCommandHandler(IApplicationDbContext context)
-    {
-        _context = context;
-    }
+    private readonly ITodoItemRepository _todoItemRepository = todoItemRepository;
 
     public async Task Handle(DeleteTodoItemCommand request, CancellationToken cancellationToken)
     {
-        var entity = await _context.TodoItems
-            .FindAsync(new object[] { request.Id }, cancellationToken);
+        Guard.Against.NotFound(request.Id, nameof(request.Id));
 
-        Guard.Against.NotFound(request.Id, entity);
-
-        _context.TodoItems.Remove(entity);
-
-        entity.AddDomainEvent(new TodoItemDeletedEvent(entity));
-
-        await _context.SaveChangesAsync(cancellationToken);
+        await _todoItemRepository.DeleteAsync(request.Id);
     }
 
 }

@@ -1,40 +1,27 @@
-﻿using Copilot.Application.Common.Interfaces;
+﻿using Copilot.Application.TodoItems.Repositories;
 using Copilot.Domain.Entities;
-using Copilot.Domain.Events;
 
 namespace Copilot.Application.TodoItems.Commands.CreateTodoItem;
 
 public record CreateTodoItemCommand : IRequest<int>
 {
-    public int ListId { get; init; }
-
     public string? Title { get; init; }
 }
 
-public class CreateTodoItemCommandHandler : IRequestHandler<CreateTodoItemCommand, int>
+public class CreateTodoItemCommandHandler(ITodoItemRepository todoItemRepository) : IRequestHandler<CreateTodoItemCommand, int>
 {
-    private readonly IApplicationDbContext _context;
-
-    public CreateTodoItemCommandHandler(IApplicationDbContext context)
-    {
-        _context = context;
-    }
+    private readonly ITodoItemRepository _todoItemRepository = todoItemRepository;
 
     public async Task<int> Handle(CreateTodoItemCommand request, CancellationToken cancellationToken)
     {
         var entity = new TodoItem
         {
-            ListId = request.ListId,
             Title = request.Title,
             Done = false
         };
 
-        entity.AddDomainEvent(new TodoItemCreatedEvent(entity));
+        TodoItem createdEntity = await _todoItemRepository.CreateAsync(entity);
 
-        _context.TodoItems.Add(entity);
-
-        await _context.SaveChangesAsync(cancellationToken);
-
-        return entity.Id;
+        return createdEntity.Id;
     }
 }

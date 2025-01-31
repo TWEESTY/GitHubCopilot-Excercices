@@ -1,7 +1,4 @@
 ﻿using Azure.Identity;
-using Copilot.Application.Common.Interfaces;
-using Copilot.Infrastructure.Data;
-using Copilot.Web.Services;
 using Microsoft.AspNetCore.Mvc;
 
 using NSwag;
@@ -13,13 +10,8 @@ public static class DependencyInjection
 {
     public static void AddWebServices(this IHostApplicationBuilder builder)
     {
-        builder.Services.AddDatabaseDeveloperPageExceptionFilter();
-
-        builder.Services.AddScoped<IUser, CurrentUser>();
 
         builder.Services.AddHttpContextAccessor();
-        builder.Services.AddHealthChecks()
-            .AddDbContextCheck<ApplicationDbContext>();
 
         builder.Services.AddExceptionHandler<CustomExceptionHandler>();
 
