@@ -16,13 +16,15 @@ public class UpdateTodoItemDetailCommandHandler(ITodoItemRepository todoItemRepo
 {
     private readonly ITodoItemRepository _todoItemRepository = todoItemRepository;
 
-    public async Task Handle(UpdateTodoItemDetailCommand request, CancellationToken cancellationToken)
+    public Task Handle(UpdateTodoItemDetailCommand request, CancellationToken cancellationToken)
     {
-        var entity = await _todoItemRepository.GetAsync(request.Id);
+        var entity = _todoItemRepository.Get(request.Id);
 
         Guard.Against.NotFound(request.Id, entity);
 
         entity.Priority = request.Priority;
         entity.Note = request.Note;
+
+        return Task.CompletedTask;
     }
 }

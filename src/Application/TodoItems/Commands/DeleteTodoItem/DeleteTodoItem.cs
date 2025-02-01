@@ -9,11 +9,13 @@ public class DeleteTodoItemCommandHandler(ITodoItemRepository todoItemRepository
 {
     private readonly ITodoItemRepository _todoItemRepository = todoItemRepository;
 
-    public async Task Handle(DeleteTodoItemCommand request, CancellationToken cancellationToken)
+    public Task Handle(DeleteTodoItemCommand request, CancellationToken cancellationToken)
     {
         Guard.Against.NotFound(request.Id, nameof(request.Id));
 
-        await _todoItemRepository.DeleteAsync(request.Id);
+         _todoItemRepository.Delete(request.Id);
+
+        return Task.CompletedTask;
     }
 
 }

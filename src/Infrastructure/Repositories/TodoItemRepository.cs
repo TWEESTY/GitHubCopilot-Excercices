@@ -3,28 +3,43 @@ using Copilot.Application.TodoItems.Repositories;
 using Copilot.Domain.Entities;
 
 namespace Copilot.Infrastructure.Repositories;
-public class TodoItemRepository : ITodoItemRepository
+public class TodoItemRepository(List<TodoItem> todoItems) : ITodoItemRepository
 {
-    public Task<TodoItem?> GetAsync(int id)
+    private readonly List<TodoItem> _todoItems = todoItems;
+
+    public TodoItem? Get(int id)
     {
-        throw new NotImplementedException();
+        return _todoItems.FirstOrDefault(x => x.Id == id);
     }
 
-    public Task<TodoItem> CreateAsync(TodoItem entity)
+    public TodoItem Create(TodoItem entity)
     {
-        throw new NotImplementedException();
+        entity.Id = _todoItems.Max(x => x.Id) + 1;
+        _todoItems.Add(entity);
+        return entity;
     }
-    public Task<TodoItem> UpdateAsync(TodoItem entity)
+    public TodoItem Update(TodoItem entity)
     {
-        throw new NotImplementedException();
+       TodoItem oldTodoItem = _todoItems.First(x => x.Id == entity.Id);
+       _todoItems.Remove(oldTodoItem);
+       _todoItems.Add(entity);
+       return entity;
     }
-    public Task DeleteAsync(int id)
+    public void Delete(int id)
     {
-        throw new NotImplementedException();
+        _todoItems.Remove(_todoItems.Single(x => x.Id == id));
     }
 
-    Task<PaginatedList<TodoItem>> ITodoItemRepository.GetListAsync(int? pageNumber, int? pageSize)
+    public PaginatedList<TodoItem> GetList(int? pageNumber, int? pageSize)
     {
-        throw new NotImplementedException();
+        List<TodoItem> result = [.. _todoItems];
+        if(pageSize is not null && pageNumber is not null){
+           result = _todoItems
+            .Take(pageSize.Value)
+            .Skip((pageNumber.Value-1) * pageSize.Value)
+            .ToList();
+        }
+
+        return new PaginatedList<TodoItem>(result, _todoItems.Count, pageNumber ?? 0, pageSize ?? _todoItems.Count);
     }
 }

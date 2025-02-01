@@ -6,10 +6,10 @@ namespace Copilot.Application.TodoItems.Repositories;
 
 public interface ITodoItemRepository
 {
-    public Task<TodoItem?> GetAsync(int id);
-    public Task<PaginatedList<TodoItem>> GetListAsync(int? pageNumber, int? pageSize);
+    public TodoItem? Get(int id);
+    public PaginatedList<TodoItem> GetList(int? pageNumber, int? pageSize);
 
-    public Task<TodoItem> CreateAsync(TodoItem entity);
-    public Task<TodoItem> UpdateAsync(TodoItem entity);
-    public Task DeleteAsync(int id);
+    public TodoItem Create(TodoItem entity);
+    public TodoItem Update(TodoItem entity);
+    public void Delete(int id);
 }

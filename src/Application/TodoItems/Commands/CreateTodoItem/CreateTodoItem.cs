@@ -12,7 +12,7 @@ public class CreateTodoItemCommandHandler(ITodoItemRepository todoItemRepository
 {
     private readonly ITodoItemRepository _todoItemRepository = todoItemRepository;
 
-    public async Task<int> Handle(CreateTodoItemCommand request, CancellationToken cancellationToken)
+    public Task<int> Handle(CreateTodoItemCommand request, CancellationToken cancellationToken)
     {
         var entity = new TodoItem
         {
@@ -20,8 +20,8 @@ public class CreateTodoItemCommandHandler(ITodoItemRepository todoItemRepository
             Done = false
         };
 
-        TodoItem createdEntity = await _todoItemRepository.CreateAsync(entity);
+        TodoItem createdEntity = _todoItemRepository.Create(entity);
 
-        return createdEntity.Id;
+        return Task.FromResult(createdEntity.Id);
     }
 }
