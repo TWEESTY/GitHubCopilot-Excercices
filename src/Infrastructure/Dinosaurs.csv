@@ -1,0 +1,21 @@
+﻿Id,Name,Species,Sex,CountryOfOrigin,NumberOfScales
+1,T-Rex,Tyrannosaurus,Male,USA,1000
+2,Velociraptor,Velociraptor,Female,Mongolia,500
+3,Triceratops,Triceratops,Male,Canada,800
+4,Stegosaurus,Stegosaurus,Male,Brazil,600
+5,Brachiosaurus,Brachiosaurus,Female,Argentina,700
+6,Spinosaurus,Spinosaurus,Male,Egypt,1200
+7,Allosaurus,Allosaurus,Male,France,900
+8,Ankylosaurus,Ankylosaurus,Female,Australia,650
+9,Compsognathus,Compsognathus,Male,Germany,300
+10,Diplodocus,Diplodocus,Male,China,1100
+11,Parasaurolophus,Parasaurolophus,Female,South Africa,750
+12,Ichthyosaurus,Ichthyosaurus,Male,Japan,400
+13,Dimetrodon,Dimetrodon,Male,India,850
+14,Archaeopteryx,Archaeopteryx,Female,Spain,450
+15,Protoceratops,Protoceratops,Male,Mexico,500
+16,Styracosaurus,Styracosaurus,Male,Italy,700
+17,Deinonychus,Deinonychus,Female,New Zealand,550
+18,Edmontosaurus,Edmontosaurus,Male,Russia,950
+19,Microraptor,Microraptor,Male,Russia,350
+20,Quetzalcoatlus,Quetzalcoatlus,Male,Russia,1000
