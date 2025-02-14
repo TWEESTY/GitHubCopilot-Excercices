@@ -1,4 +1,5 @@
-﻿using Copilot.Application.TodoItems.Repositories;
+﻿using Copilot.Application.Dinosaurs.Repositories;
+using Copilot.Application.TodoItems.Repositories;
 using Copilot.Domain.Constants;
 using Copilot.Domain.Entities;
 using Copilot.Domain.Enums;
@@ -19,6 +20,10 @@ public static class DependencyInjection
 
         builder.Services.AddSingleton<ITodoItemRepository>(provider => 
             new TodoItemRepository(todoItems: CreateTodoItemsForSeeding())
+        );
+
+        builder.Services.AddSingleton<IDinosaurRepository>(provider =>
+            new DinosaurRepository(dinosaurs: CreateDinosaursForSeeding())
         );
     }
 
@@ -41,5 +46,30 @@ public static class DependencyInjection
                 Title = "Second item title"
             }
         };
+    }
+
+    private static List<Dinosaur> CreateDinosaursForSeeding()
+    {
+        return new List<Dinosaur>
+               {
+                   new Dinosaur
+                   {
+                       Id = 1,
+                       Name = "T-Rex",
+                       Species = "Tyrannosaurus",
+                       Sex = "Male",
+                       CountryOfOrigin = "USA",
+                       NumberOfScales = 1000
+                   },
+                   new Dinosaur
+                   {
+                       Id = 2,
+                       Name = "Velociraptor",
+                       Species = "Velociraptor",
+                       Sex = "Female",
+                       CountryOfOrigin = "Mongolia",
+                       NumberOfScales = 500
+                   }
+               };
     }
 }
