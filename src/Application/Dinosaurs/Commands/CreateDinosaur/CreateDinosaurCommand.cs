@@ -14,8 +14,11 @@ namespace Copilot.Application.Dinosaurs.Commands.CreateDinosaur
             _repository = repository;
         }
 
-        public Task<Dinosaur> Handle(CreateDinosaurCommand request, CancellationToken cancellationToken)
+        public async Task<Dinosaur> Handle(CreateDinosaurCommand request, CancellationToken cancellationToken)
         {
+            var validator = new CreateDinosaurCommandValidator();
+            await validator.ValidateAndThrowAsync(request, cancellationToken);
+
             var dinosaur = new Dinosaur
             {
                 Name = request.Name,
@@ -25,7 +28,7 @@ namespace Copilot.Application.Dinosaurs.Commands.CreateDinosaur
                 NumberOfScales = request.NumberOfScales
             };
 
-            return Task.FromResult(_repository.Create(dinosaur));
+            return _repository.Create(dinosaur);
         }
     }
 }
