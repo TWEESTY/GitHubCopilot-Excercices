@@ -12,8 +12,11 @@ public class CreateTodoItemCommandHandler(ITodoItemRepository todoItemRepository
 {
     private readonly ITodoItemRepository _todoItemRepository = todoItemRepository;
 
-    public Task<int> Handle(CreateTodoItemCommand request, CancellationToken cancellationToken)
+    public async Task<int> Handle(CreateTodoItemCommand request, CancellationToken cancellationToken)
     {
+        var validator = new CreateTodoItemCommandValidator();
+        await validator.ValidateAndThrowAsync(request, cancellationToken);
+
         var entity = new TodoItem
         {
             Title = request.Title,
@@ -22,6 +25,6 @@ public class CreateTodoItemCommandHandler(ITodoItemRepository todoItemRepository
 
         TodoItem createdEntity = _todoItemRepository.Create(entity);
 
-        return Task.FromResult(createdEntity.Id);
+        return createdEntity.Id;
     }
 }
