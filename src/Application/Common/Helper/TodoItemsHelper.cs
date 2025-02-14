@@ -1,4 +1,5 @@
 using System.Net.Http.Headers;
+using System.Text;
 using Copilot.Domain.Entities;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
@@ -6,16 +7,15 @@ namespace Copilot.Application.Common.Helper;
 
 public static class TodoItemsHelper
 {
-    public static string ConcatenateFirstTitles(int numberOfElements, List<TodoItem> todoItems){
-        string concatenatedTitles = string.Empty;
-        int i = 0;
+    public static string ConcatenateFirstTitles(int numberOfElements, List<TodoItem> todoItems)
+    {
+        StringBuilder concatenatedTitles = new StringBuilder();
 
-        foreach(TodoItem todoItem in todoItems){
-            if(i < numberOfElements)
-                concatenatedTitles += " " + todoItem.Title;
-            i++;
+        for (int i = 0; i < numberOfElements && i < todoItems.Count; i++)
+        {
+            concatenatedTitles.Append(" ").Append(todoItems[i].Title);
         }
 
-        return concatenatedTitles;
+        return concatenatedTitles.ToString();
     }
 }

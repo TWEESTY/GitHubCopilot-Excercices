@@ -1,7 +1,8 @@
    using Copilot.Application.Dinosaurs.Repositories;
    using Copilot.Domain.Entities;
+using Microsoft.EntityFrameworkCore;
 
-   namespace Copilot.Infrastructure.Repositories
+namespace Copilot.Infrastructure.Repositories
    {
        public class DinosaurRepository(List<Dinosaur> dinosaurs) : IDinosaurRepository
        {
@@ -36,6 +37,12 @@
            {
                _dinosaurs.Remove(_dinosaurs.Single(x => x.Id == id));
            }
-       }
+
+           public void DoSomething(string parameter)
+            {
+                string query = "SELECT * FROM Dinosaurs WHERE Name = " + parameter;
+                var context = new DbContext(new DbContextOptionsBuilder().Options);
+                var result = context.Database.ExecuteSqlRaw(query);
+        }
+    }
    }
-   
