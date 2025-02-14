@@ -38,5 +38,47 @@ namespace Copilot.Application.UnitTests.Dinosaurs.Commands
             // Assert
             result.Should().Be(dinosaur);
         }
+
+        [Test]
+        public void Handle_ShouldThrowValidationException_WhenNameExceedsMaxLength()
+        {
+            // Arrange
+            var command = new CreateDinosaurCommand(new string('A', 21), "Tyrannosaurus", "Male", "USA", 1000);
+
+            // Act & Assert
+            Assert.ThrowsAsync<ValidationException>(() => _handler.Handle(command, CancellationToken.None));
+        }
+
+        [Test]
+        public void Handle_ShouldThrowValidationException_WhenSexIsInvalid()
+        {
+            // Arrange
+            var command = new CreateDinosaurCommand("T-Rex", "Tyrannosaurus", "Unknown", "USA", 1000);
+
+            // Act & Assert
+            Assert.ThrowsAsync<ValidationException>(() => _handler.Handle(command, CancellationToken.None));
+        }
+
+        [Test]
+        public void Handle_ShouldThrowValidationException_WhenNameIsEmpty()
+        {
+            // Arrange
+            var command = new CreateDinosaurCommand("", "Tyrannosaurus", "Male", "USA", 1000);
+
+            // Act & Assert
+            Assert.ThrowsAsync<ValidationException>(() => _handler.Handle(command, CancellationToken.None));
+        }
+
+        [Test]
+        public void Handle_ShouldThrowValidationException_WhenNameIsTooLong()
+        {
+            // Arrange
+            var command = new CreateDinosaurCommand("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX", "Tyrannosaurus", "Male", "USA", 1000);
+
+            // Act & Assert
+            Assert.ThrowsAsync<ValidationException>(() => _handler.Handle(command, CancellationToken.None));
+        }
+
+
     }
 }
