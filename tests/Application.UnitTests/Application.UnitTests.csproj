@@ -28,6 +28,8 @@
     </ItemGroup>
 
     <ItemGroup>
+      <Folder Include="Dinosaurs\Commands\" />
+      <Folder Include="Dinosaurs\Queries\" />
       <Folder Include="TodoItems\Queries\" />
     </ItemGroup>
 
