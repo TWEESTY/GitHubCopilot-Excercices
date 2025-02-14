@@ -14,6 +14,6 @@ public class GetAllTitlesTodoItemsQueryHandler(ITodoItemRepository todoItemRepos
     {
         PaginatedList<TodoItem> paginatedList = _todoItemRepository.GetList();
     
-        return Task.FromResult(string.Join(";",paginatedList.Items.Select(x => x.Note)));
+        return Task.FromResult(string.Join(";",paginatedList.Items.Select(x => x.Title)));
     }
 }

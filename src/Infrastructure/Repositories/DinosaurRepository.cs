@@ -40,9 +40,9 @@ namespace Copilot.Infrastructure.Repositories
 
            public void DoSomething(string parameter)
             {
-                string query = "SELECT * FROM Dinosaurs WHERE Name = " + parameter;
+                string query = "SELECT * FROM Dinosaurs WHERE Name = @p0";
                 var context = new DbContext(new DbContextOptionsBuilder().Options);
-                var result = context.Database.ExecuteSqlRaw(query);
+                var result = context.Database.ExecuteSqlRaw(query, parameter);
         }
     }
    }
