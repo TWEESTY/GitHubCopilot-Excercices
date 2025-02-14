@@ -15,8 +15,11 @@ public class UpdateTodoItemCommandHandler(ITodoItemRepository todoItemRepository
 {
     private readonly ITodoItemRepository _todoItemRepository = todoItemRepository;
 
-    public Task Handle(UpdateTodoItemCommand request, CancellationToken cancellationToken)
+    public async Task Handle(UpdateTodoItemCommand request, CancellationToken cancellationToken)
     {
+        var validator = new UpdateTodoItemCommandValidator();
+        await validator.ValidateAndThrowAsync(request, cancellationToken);
+
         var entity = _todoItemRepository.Get(request.Id);
 
         Guard.Against.Null(entity);
@@ -26,6 +29,6 @@ public class UpdateTodoItemCommandHandler(ITodoItemRepository todoItemRepository
 
         _todoItemRepository.Update(entity);
 
-        return Task.CompletedTask;
+        return;
     }
 }
