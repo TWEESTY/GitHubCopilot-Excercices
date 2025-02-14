@@ -15,16 +15,19 @@ public class GetTodoItemsWithPaginationQueryHandler(ITodoItemRepository todoItem
     private readonly ITodoItemRepository _todoItemRepository = todoItemRepository;
     private readonly IMapper _mapper = mapper;
 
-    public Task<PaginatedList<TodoItemBriefDto>> Handle(GetTodoItemsWithPaginationQuery request, CancellationToken cancellationToken)
+    public async Task<PaginatedList<TodoItemBriefDto>> Handle(GetTodoItemsWithPaginationQuery request, CancellationToken cancellationToken)
     {
+        var validator = new GetTodoItemsWithPaginationQueryValidator();
+        await validator.ValidateAndThrowAsync(request, cancellationToken);
+
         PaginatedList<TodoItem> todoItems = _todoItemRepository.GetList(request.PageNumber, request.PageSize);
 
-        return Task.FromResult(new PaginatedList<TodoItemBriefDto>(
+        return new PaginatedList<TodoItemBriefDto>(
             todoItems.Items.Select(x => _mapper.Map<TodoItemBriefDto>(x)).ToList(),
             todoItems.TotalCount, 
             request.PageNumber,
             request.PageSize
-        ));
+        );
 
     }
 }
